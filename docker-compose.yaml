@@ -1,1 +1,6 @@
-# TODO: Fill in service definitions
+version: "3.8"
+services:
+  lbg-car-front:
+    image: agray998/lbg-car-front:latest
+  lbg-car-back:
+    image: agray998/lbg-car-back:latest
