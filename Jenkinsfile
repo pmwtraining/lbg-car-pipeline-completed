@@ -1,6 +1,9 @@
-// TODO: Fill in pipeline stages
 pipeline {
     agent any
+    environment {
+        SERVER_URL = "http://127.0.0.1:8000/" // replace with IP of second server
+        MYSQL_ROOT_PASSWORD = credentials('MYSQL_ROOT_PASSWORD')
+    }
     stages {
         stage('Checkout source repos') {
             steps {
@@ -16,7 +19,7 @@ pipeline {
             steps {
                 dir("lbg-car-back") {
                     sh "mvn clean test"
-                    sh "docker build -t agray998/lbg-car-back:v${BUILD_NUMBER} ."
+                    sh "docker build -t agray998/lbg-car-back:v${BUILD_NUMBER} --build-arg MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} ."
                     sh "docker tag agray998/lbg-car-back:v${BUILD_NUMBER} agray998/lbg-car-back:latest"
                 }
             }
@@ -24,9 +27,12 @@ pipeline {
         stage('Test and build react frontend') {
             steps {
                 dir("lbg-car-front") {
-                    sh "yarn test"
-                    sh "docker build -t agray998/lbg-car-front:v${BUILD_NUMBER} ."
-                    sh "docker tag agray998/lbg-car-front:v${BUILD_NUMBER} agray998/lbg-car-front:latest"
+                    sh """
+                    yarn test
+                    echo "export const SERVER_URL = ${SERVER_URL}" > src/constants.js
+                    docker build -t agray998/lbg-car-front:v${BUILD_NUMBER} .
+                    docker tag agray998/lbg-car-front:v${BUILD_NUMBER} agray998/lbg-car-front:latest
+                    """
                 }
             }
         }
@@ -41,7 +47,12 @@ pipeline {
         }
         stage('Deploy to server') {
             steps {
-                sh "echo 'TODO'"
+                sh "scp -i ~/.ssh/server_key docker-compose.yaml jenkins@cardb-server:/home/jenkins/app/docker-compose.yaml"
+                sh """
+                ssh -i ~/.ssh/server_key jenkins@cardb-server <<EOF
+                cd app
+                docker-compose up -d
+                """
             }
         }
     }

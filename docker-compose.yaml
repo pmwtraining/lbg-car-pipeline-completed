@@ -2,5 +2,20 @@ version: "3.8"
 services:
   lbg-car-front:
     image: agray998/lbg-car-front:latest
+    ports:
+    - target: 80
+      published: 80
+    depends_on:
+    - lbg-car-back
   lbg-car-back:
     image: agray998/lbg-car-back:latest
+    ports:
+    - target: 8000
+      published: 8000
+    depends_on:
+    - mysql
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: cardb_jwt
