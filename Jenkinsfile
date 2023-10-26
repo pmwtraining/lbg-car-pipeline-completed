@@ -18,7 +18,14 @@ pipeline {
         stage('Test and build spring backend') {
             steps {
                 dir("lbg-car-back") {
-                    // sh "mvn clean test"
+                    sh "mvn clean test"
+                    sh '''
+                    cat - > src/main/resources/application.properties <<EOF
+                    spring.profiles.active=prod
+                    logging.level.root=DEBUG
+                    server.port=8000
+                    spring.jpa.show-sql=true
+                    '''
                     sh "docker build -t agray998/lbg-car-back:v${BUILD_NUMBER} --build-arg MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} ."
                     sh "docker tag agray998/lbg-car-back:v${BUILD_NUMBER} agray998/lbg-car-back:latest"
                 }
@@ -28,7 +35,7 @@ pipeline {
             steps {
                 dir("lbg-car-front") {
                     sh """
-                    # yarn test
+                    yarn test
                     docker build --build-arg SERVER_URL=${SERVER_URL} -t agray998/lbg-car-front:v${BUILD_NUMBER} .
                     docker tag agray998/lbg-car-front:v${BUILD_NUMBER} agray998/lbg-car-front:latest
                     """
