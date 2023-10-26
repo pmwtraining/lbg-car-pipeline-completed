@@ -49,10 +49,16 @@ pipeline {
                 sh "scp -i ~/.ssh/server_key docker-compose.yaml jenkins@cardb-server:/home/jenkins/app/docker-compose.yaml"
                 sh """
                 ssh -i ~/.ssh/server_key jenkins@cardb-server <<EOF
+                export MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
                 cd app
                 docker-compose up -d
                 """
             }
+        }
+    }
+    post {
+        always {
+            cleanWs()
         }
     }
 }
