@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SERVER_URL = "http://127.0.0.1:8000/" // replace with IP of second server
+        SERVER_URL = "http://34.78.51.50:8000/" // replace with IP of second server
         MYSQL_ROOT_PASSWORD = credentials('MYSQL_ROOT_PASSWORD')
     }
     stages {
