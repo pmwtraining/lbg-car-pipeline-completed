@@ -29,7 +29,7 @@ pipeline {
                 dir("lbg-car-front") {
                     sh """
                     # yarn test
-                    docker build -t --build-arg SERVER_URL=${SERVER_URL} agray998/lbg-car-front:v${BUILD_NUMBER} .
+                    docker build --build-arg SERVER_URL=${SERVER_URL} -t agray998/lbg-car-front:v${BUILD_NUMBER} .
                     docker tag agray998/lbg-car-front:v${BUILD_NUMBER} agray998/lbg-car-front:latest
                     """
                 }
