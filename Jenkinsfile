@@ -35,6 +35,7 @@ pipeline {
             steps {
                 dir("lbg-car-front") {
                     sh """
+                    npm install
                     yarn test
                     docker build --build-arg SERVER_URL=${SERVER_URL} -t agray998/lbg-car-front:v${BUILD_NUMBER} .
                     docker tag agray998/lbg-car-front:v${BUILD_NUMBER} agray998/lbg-car-front:latest
