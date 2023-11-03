@@ -27,7 +27,7 @@ pipeline {
                     spring.jpa.show-sql=true
                     '''
                     sh "docker build -t pmwtraining/lbg-car-back:v${BUILD_NUMBER} --build-arg MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} ."
-                    sh "docker tag pmwtraining/lbg-car-back:v${BUILD_NUMBER} victorialloyd/lbg-car-back:latest"
+                    sh "docker tag pmwtraining/lbg-car-back:v${BUILD_NUMBER} pmwtraining/lbg-car-back:latest"
                 }
             }
         }
@@ -38,7 +38,7 @@ pipeline {
                     npm install
                     yarn test
                     docker build --build-arg SERVER_URL=${SERVER_URL} -t pmwtraining/lbg-car-front:v${BUILD_NUMBER} .
-                    docker tag victorialloyd/lbg-car-front:v${BUILD_NUMBER} pmwtraining/lbg-car-front:latest
+                    docker tag pmwtraining/lbg-car-front:v${BUILD_NUMBER} pmwtraining/lbg-car-front:latest
                     """
                 }
             }
