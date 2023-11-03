@@ -49,7 +49,7 @@ pipeline {
                 sh "docker push pmwtraininglbg-car-front:latest"
                 sh "docker push pmwtraininglbg-car-back:v${BUILD_NUMBER}"
                 sh "docker push pmwtraining/lbg-car-back:latest"
-                sh "docker rmi pmwtraininglbg-car-back victorialloyd/lbg-car-back:v${BUILD_NUMBER} pmwtraining/lbg-car-front pmwtraining/lbg-car-front:v${BUILD_NUMBER}"
+                sh "docker rmi pmwtraininglbg-car-back pmwtraining/lbg-car-back:v${BUILD_NUMBER} pmwtraining/lbg-car-front pmwtraining/lbg-car-front:v${BUILD_NUMBER}"
             }
         }
         stage('Deploy to server') {
